@@ -5,8 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.movieapp.R
 import com.example.movieapp.databinding.ItemMovieLayoutBinding
 import com.example.movieapp.domain.model.MovieInfo
+import com.example.movieapp.domain.model.MovieListUI
+import com.example.movieapp.util.Constants
 
 class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>() {
 
@@ -35,21 +39,26 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return differ.currentList.size
     }
 
     inner class MoviesViewHolder(val binding:ItemMovieLayoutBinding):RecyclerView.ViewHolder(binding.root){
 
         fun bind(movieInfo: MovieInfo){
-
+            val posterURL = Constants.TMDB_IMAGE_BASE_URL + movieInfo.posterPath
             binding.apply {
                 movieTitleText.text = movieInfo.originalTitle
+                Glide.with(ivMovieImage.context)
+                    .load(posterURL)
+                    .error(R.mipmap.ic_launcher)
+                    .centerCrop()
+                    .into(ivMovieImage)
             }
         }
     }
 
-    private var movieItemClickListener:((MovieInfo)->Unit)? = null
-    fun setOnMovieClickListener(listener:((MovieInfo)->Unit)){
+    private var movieItemClickListener:((MovieListUI)->Unit)? = null
+    fun setOnMovieClickListener(listener:((MovieListUI)->Unit)){
         movieItemClickListener = listener
     }
 
