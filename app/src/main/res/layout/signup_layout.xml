@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Create Account"
+                android:text="@string/create_account"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
-        android:text="Create Account"
+        android:text="@string/create_account"
         android:textColor="@color/black"
         android:textSize="34sp"
         android:textStyle="bold"
@@ -55,10 +55,13 @@
         android:layout_marginEnd="64dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Username"
+        android:minHeight="48dp"
+        android:hint="@string/username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCreateAccount" />
+        app:layout_constraintTop_toBottomOf="@+id/textCreateAccount"
+        tools:ignore="LabelFor,VisualLintTextFieldSize"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/editTextPassword1"
@@ -68,10 +71,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
         android:ems="10"
+        android:importantForAutofill="no"
         android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/editTextPassword2"
@@ -82,9 +89,13 @@
         android:layout_marginEnd="64dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:hint="@string/re_enter_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword1" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword1"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/buttonCreateLogin"
@@ -93,8 +104,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
-        android:text="Create Account"
+        android:text="@string/create_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword2"
+        tools:ignore="VisualLintButtonSize" />
 </androidx.constraintlayout.widget.ConstraintLayout>
