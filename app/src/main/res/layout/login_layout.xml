@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Login"
+                android:text="@string/login"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
-        android:text="Login"
+        android:text="@string/login"
         android:textColor="@color/black"
         android:textSize="34sp"
         android:textStyle="bold"
@@ -54,11 +54,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
         android:ems="10"
+        android:hint="@string/name"
         android:inputType="text"
-        android:text="Name"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/textLogin"
+        android:importantForAutofill="no"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -67,11 +70,16 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
+        android:contentDescription=""
         android:ems="10"
+        android:hint="@string/password"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText5" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText5"
+        tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/buttonLogin"
@@ -80,8 +88,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
-        android:text="Login"
+        android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+        tools:ignore="VisualLintButtonSize" />
 </androidx.constraintlayout.widget.ConstraintLayout>
