@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <EditText
-        android:id="@+id/editTextUsername"
+        android:id="@+id/emailField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -56,15 +56,15 @@
         android:ems="10"
         android:inputType="text"
         android:minHeight="48dp"
-        android:hint="@string/username"
+        android:hint="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCreateAccount"
-        tools:ignore="LabelFor,VisualLintTextFieldSize"
+        tools:ignore="LabelFor,TextFields,VisualLintTextFieldSize"
         android:importantForAutofill="no" />
 
     <EditText
-        android:id="@+id/editTextPassword1"
+        android:id="@+id/passwordField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -77,11 +77,11 @@
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+        app:layout_constraintTop_toBottomOf="@+id/emailField"
         tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
     <EditText
-        android:id="@+id/editTextPassword2"
+        android:id="@+id/retypePasswordField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -93,7 +93,7 @@
         android:hint="@string/re_enter_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword1"
+        app:layout_constraintTop_toBottomOf="@+id/passwordField"
         tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize"
         android:importantForAutofill="no" />
 
@@ -107,6 +107,6 @@
         android:text="@string/create_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword2"
+        app:layout_constraintTop_toBottomOf="@+id/retypePasswordField"
         tools:ignore="VisualLintButtonSize" />
 </androidx.constraintlayout.widget.ConstraintLayout>
