@@ -1,13 +1,14 @@
-package com.example.movieapp.presentation
+package com.example.movieapp.presentation.user
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.movieapp.R
+import com.example.movieapp.presentation.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class UserLogin : AppCompatActivity() {

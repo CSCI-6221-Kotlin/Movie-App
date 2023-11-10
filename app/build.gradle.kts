@@ -57,6 +57,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
     composeOptions {

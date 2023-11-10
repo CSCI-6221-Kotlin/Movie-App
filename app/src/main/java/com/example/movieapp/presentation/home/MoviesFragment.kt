@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapp.R
@@ -18,12 +17,13 @@ import com.example.movieapp.databinding.FragmentMoviesBinding
 import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.usecase.MovieDisplayType
 import com.example.movieapp.firebase.UserDatabase
+import com.example.movieapp.presentation.user.UserAccount
+import com.example.movieapp.presentation.user.UserLogin
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.example.movieapp.presentation.movieDetail.MovieDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -65,12 +65,11 @@ class MoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews();
-        initListeners();
-        getMovies()
+        initViews()
         initListeners()
-        changeWelcomeText()
+        getMovies()
         initObservers()
+        changeWelcomeText()
     }
 
     private fun getMovies() {
@@ -133,7 +132,6 @@ class MoviesFragment : Fragment() {
         }
     }
 
-
     private fun changeWelcomeText() {
         val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
         val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -165,6 +163,7 @@ class MoviesFragment : Fragment() {
                 }
             })
         }
+    }
 
     private fun initListeners() {
         val listener: (MovieInfo) -> Unit = { movieInfo ->
