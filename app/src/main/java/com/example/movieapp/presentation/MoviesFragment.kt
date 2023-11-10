@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapp.databinding.FragmentMoviesBinding
 import com.example.movieapp.domain.usecase.MovieDisplayType
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -37,8 +38,14 @@ class MoviesFragment : Fragment() {
 
         // User Profile Icon Clicked:
         binding.profileImageButton.setOnClickListener { v ->
-            val intent = Intent(v.context, UserLogin::class.java)
-            v.context.startActivity(intent)
+            // Check if a user is logged in:
+            if (FirebaseAuth.getInstance().currentUser == null) {
+                val intent = Intent(v.context, UserLogin::class.java)
+                v.context.startActivity(intent)
+            } else {
+                val intent = Intent(v.context, UserAccount::class.java)
+                v.context.startActivity(intent)
+            }
         }
         return binding.root
     }
