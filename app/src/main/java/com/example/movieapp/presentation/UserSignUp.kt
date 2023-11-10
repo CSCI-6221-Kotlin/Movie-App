@@ -1,11 +1,11 @@
 package com.example.movieapp.presentation
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.movieapp.R
 import com.example.movieapp.firebase.UserDatabase
 import com.google.firebase.analytics.FirebaseAnalytics

@@ -7,4 +7,9 @@
     <string name="username">Username</string>
     <string name="re_enter_password">Re-enter Password</string>
     <string name="email">Email</string>
+    <string name="popular">Popular</string>
+    <string name="trending">Trending</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="welcome">Welcome %1$s!</string>
 </resources>
