@@ -1,4 +1,4 @@
-package com.example.movieapp.presentation
+package com.example.movieapp.presentation.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movieapp.R
 import com.example.movieapp.databinding.FragmentMoviesBinding
+import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.usecase.MovieDisplayType
+import com.example.movieapp.presentation.movieDetail.MovieDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,29 +30,30 @@ class MoviesFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val moviesViewModel:MoviesViewModel by viewModels()
+    private val moviesViewModel: MoviesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentMoviesBinding.inflate(inflater,container,false)
+        _binding = FragmentMoviesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapters()
+        initViews();
+        initListeners();
         getMovies()
-        initListeners()
+        initObservers()
     }
 
-    private fun getMovies(){
+    private fun getMovies() {
         moviesViewModel.fetchMovies()
     }
 
-    private fun initAdapters(){
+    private fun initViews() {
         movieListAdapter = MovieListAdapter()
         movieListAdapter2 = MovieListAdapter()
         movieListAdapter3 = MovieListAdapter()
@@ -55,31 +61,31 @@ class MoviesFragment : Fragment() {
 
         binding.recyclerView1.apply {
             adapter = movieListAdapter
-            layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         binding.recyclerView2.apply {
             adapter = movieListAdapter2
-            layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         binding.recyclerView3.apply {
             adapter = movieListAdapter3
-            layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         binding.recyclerView4.apply {
             adapter = movieListAdapter4
-            layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
-    private fun initListeners(){
+    private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch() {
-            moviesViewModel.moviesListUIState.collect{
+            moviesViewModel.moviesListUIState.collect {
                 it?.let { movieListUI ->
-                    movieListUI.movieList.map { movieInfo->
-                        when(movieInfo.movieDisplayType){
+                    movieListUI.movieList.map { movieInfo ->
+                        when (movieInfo.movieDisplayType) {
                             MovieDisplayType.TRENDING -> {
                                 movieListAdapter.differ.submitList(movieListUI.movieList)
                             }
@@ -101,6 +107,18 @@ class MoviesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initListeners() {
+        val listener: (MovieInfo) -> Unit = { movieInfo ->
+            val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movieInfo.id)
+            findNavController().navigate(action)
+        }
+
+        movieListAdapter.setOnMovieClickListener(listener)
+        movieListAdapter2.setOnMovieClickListener(listener)
+        movieListAdapter3.setOnMovieClickListener(listener)
+        movieListAdapter4.setOnMovieClickListener(listener)
     }
 
     override fun onDestroyView() {

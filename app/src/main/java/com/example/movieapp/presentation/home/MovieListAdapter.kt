@@ -1,4 +1,4 @@
-package com.example.movieapp.presentation
+package com.example.movieapp.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -29,12 +29,12 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MovieListAdapter.MoviesViewHolder {
+    ): MoviesViewHolder {
         val binding = ItemMovieLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return MoviesViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MovieListAdapter.MoviesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
     }
 
@@ -51,14 +51,21 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
                 Glide.with(ivMovieImage.context)
                     .load(posterURL)
                     .error(R.mipmap.ic_launcher)
-                    .centerCrop()
+                    .centerInside()
                     .into(ivMovieImage)
+
+                root.setOnClickListener {
+                    movieItemClickListener?.let {
+                        it(movieInfo)
+                    }
+                }
             }
         }
     }
 
-    private var movieItemClickListener:((MovieListUI)->Unit)? = null
-    fun setOnMovieClickListener(listener:((MovieListUI)->Unit)){
+
+    private var movieItemClickListener:((MovieInfo)->Unit)? = null
+    fun setOnMovieClickListener(listener:((MovieInfo)->Unit)){
         movieItemClickListener = listener
     }
 
