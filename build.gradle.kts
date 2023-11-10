@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        val nav_version = "2.7.4"
+        val nav_version = "2.7.5"
         val android_build_tools_version = "8.1.2"
         val hiltAndroidGradlePluginVersion = "2.48.1"
         classpath("com.android.tools.build:gradle:$android_build_tools_version")

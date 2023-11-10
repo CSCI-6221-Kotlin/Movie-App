@@ -5,9 +5,50 @@
     android:id="@+id/movies_nav_graph"
     app:startDestination="@id/moviesFragment">
 
+    <!-- Existing fragments in the main navigation graph -->
     <fragment
         android:id="@+id/moviesFragment"
-        android:name="com.example.movieapp.presentation.MoviesFragment"
+        android:name="com.example.movieapp.presentation.home.MoviesFragment"
         android:label="fragment_movies"
-        tools:layout="@layout/fragment_movies" />
+        tools:layout="@layout/fragment_movies">
+        <action
+            android:id="@+id/action_moviesFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment">
+            <argument
+                android:name="movieID"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/movieDetailFragment"
+        android:name="com.example.movieapp.presentation.movieDetail.MovieDetailFragment"
+        android:label="fragment_movie_detail"
+        tools:layout="@layout/fragment_movie_detail">
+        <argument
+            android:name="movieID"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_movieDetailFragment_to_movieWebPageFragment"
+            app:destination="@id/movieWebPageFragment">
+            <argument
+                android:name="url"
+                app:argType="string" />
+
+        </action>
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/movieWebPageFragment"
+        android:name="com.example.movieapp.presentation.movieWebPage.MovieWebPageFragment"
+        android:label="fragment_movie_web_page"
+        tools:layout="@layout/fragment_movie_web_page">
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
