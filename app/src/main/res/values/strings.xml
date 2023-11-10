@@ -11,8 +11,9 @@
     <string name="trending">Trending</string>
     <string name="top_rated">Top Rated</string>
     <string name="upcoming">Upcoming</string>
-    <string name="welcome">Welcome %1$s!</string>
     <string name="watchlist">Watchlist</string>
     <string name="saved_movies">Saved Movies</string>
     <string name="account">Account</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcomeUser">Welcome %1$s</string>
 </resources>

@@ -26,6 +26,22 @@ class UserAccount : AppCompatActivity() {
         val firebaseAuth = FirebaseAuth.getInstance()
         val firebaseDatabase = FirebaseDatabase.getInstance()
 
+        // Change username text:
+        changeUsernameText(firebaseAuth, firebaseDatabase)
+
+        // Logout button clicked:
+        logoutButton = findViewById(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            if (firebaseAuth.currentUser != null) {
+                firebaseAuth.signOut()
+
+                val intent = Intent(this@UserAccount, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun changeUsernameText(firebaseAuth: FirebaseAuth, firebaseDatabase: FirebaseDatabase) {
         // Change username field to current user's username:
         usernameText = findViewById(R.id.usernameText)
         var currentUsername: String
@@ -46,20 +62,9 @@ class UserAccount : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.d("MovieApp", "Unable to change welcome text!")
+                    Log.d("MovieApp", "Unable to change username text!")
                 }
             })
-        }
-
-        // Logout button clicked:
-        logoutButton = findViewById(R.id.logoutButton)
-        logoutButton.setOnClickListener {
-            if (firebaseAuth.currentUser != null) {
-                firebaseAuth.signOut()
-
-                val intent = Intent(this@UserAccount, MainActivity::class.java)
-                startActivity(intent)
-            }
         }
     }
 }
