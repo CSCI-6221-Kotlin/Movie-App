@@ -1,6 +1,7 @@
 package com.example.movieapp.data.remote
 
 import com.example.movieapp.BuildConfig
+import com.example.movieapp.data.remote.dto.MovieDetailResponse
 import com.example.movieapp.data.remote.dto.MovieListDTO
 import retrofit2.Response
 import retrofit2.http.GET
@@ -19,10 +20,15 @@ interface TMDBApi {
     suspend fun getPopularMovies(@Query("api_key") apiKey:String = BuildConfig.API_KEY) : Response<MovieListDTO>
 
     @GET("movie/upcoming")
-    suspend fun getUpComingMovies(@Query("api_key") apiKey:String = BuildConfig.API_KEY) : Response<MovieListDTO>
+    suspend fun getUpComingMovies(@Query("api_key") apiKey:String = BuildConfig.API_KEY, @Query("region") region:String = "US") : Response<MovieListDTO>
 
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(@Query("api_key") apiKey:String = BuildConfig.API_KEY) : Response<MovieListDTO>
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetail(
+        @Path("movie_id") movieID:Int,
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY) : Response<MovieDetailResponse>
 
     companion object{
         const val BASE_URL = "https://api.themoviedb.org/3/"
