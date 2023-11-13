@@ -75,7 +75,6 @@ class MovieDetailFragment : Fragment() {
             adapter = movieRecommendationListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
-
     }
 
     private fun getMovieDetail() {
@@ -97,6 +96,10 @@ class MovieDetailFragment : Fragment() {
             movieDetailViewModel.moviesListUIState.collect {
                 it?.let { movieListUI ->
                     movieRecommendationListAdapter.differ.submitList(movieListUI.movieList)
+
+                    if (movieRecommendationListAdapter.itemCount > 0){
+                        binding.movieCategoryRecommendation.visibility = View.VISIBLE
+                    }
                 }
             }
         }
