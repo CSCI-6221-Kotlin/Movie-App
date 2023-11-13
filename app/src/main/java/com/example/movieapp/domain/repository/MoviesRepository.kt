@@ -13,4 +13,5 @@ interface MoviesRepository {
     suspend fun getUpcomingMovies(movieDisplayType: MovieDisplayType) : Flow<Resource<MovieListUI>>
     suspend fun getTrendingMovies(movieDisplayType: MovieDisplayType) : Flow<Resource<MovieListUI>>
     suspend fun getMovieDetail(movieID: Int): Flow<Resource<MovieDetailUI>>
+    suspend fun getRecommendedMovies(movieID: Int) : Flow<Resource<MovieListUI>>
 }

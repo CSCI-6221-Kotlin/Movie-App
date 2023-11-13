@@ -7,5 +7,6 @@ data class MovieDetailUI(
     val releaseDate: String,
     val overview:String,
     val homepage:String,
+    val title:String,
 )
 

@@ -6,7 +6,7 @@ import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.model.MovieListUI
 import com.example.movieapp.domain.usecase.MovieDisplayType
 
-fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType):MovieListUI{
+fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType?):MovieListUI{
     val resultList = results?.map {
         MovieInfo(
             id = it.id,
@@ -16,6 +16,7 @@ fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType):MovieListUI{
         )
     }
     return MovieListUI(
-        movieList = resultList.toSafeList()
+        // Having issues with aspect ratio when rendering error image when poster path is not found. Current workaround solution: remove fro list.
+        movieList = resultList.toSafeList().filter{ it.posterPath != null }
     )
 }

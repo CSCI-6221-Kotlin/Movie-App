@@ -30,6 +30,11 @@ interface TMDBApi {
         @Path("movie_id") movieID:Int,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY) : Response<MovieDetailResponse>
 
+    @GET("movie/{movie_id}/recommendations")
+    suspend fun getRecommendation(
+        @Path("movie_id") movieID:Int,
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY) : Response<MovieListDTO>
+
     companion object{
         const val BASE_URL = "https://api.themoviedb.org/3/"
     }

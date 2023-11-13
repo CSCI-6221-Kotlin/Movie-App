@@ -111,4 +111,23 @@ class MoviesRepositoryImpl @Inject constructor(
            emit(Resource.Error(exception.toString()))
         }
     }
+
+    override suspend fun getRecommendedMovies(movieID: Int): Flow<Resource<MovieListUI>> =
+        flow {
+            try {
+                val response = api.getRecommendation(movieID)
+                if (response.isSuccessful) {
+                    response.body()?.let { movieListDTO ->
+                        emit(
+                            Resource.Success(
+                                movieListDTO.toMovieListUI(null)
+                            )
+                        )
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                emit(Resource.Error(exception.toString()))
+            }
+        }
 }
