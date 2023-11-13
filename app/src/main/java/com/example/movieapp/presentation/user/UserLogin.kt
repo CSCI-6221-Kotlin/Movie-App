@@ -2,6 +2,8 @@ package com.example.movieapp.presentation.user
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -18,12 +20,30 @@ class UserLogin : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private val textWatcher: TextWatcher = object: TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Verify if email and password is filled out to enable the login button:
+            val emailFilled: Boolean = email.text.toString().isNotEmpty()
+            val passwordFilled: Boolean = password.text.toString().isNotEmpty()
+
+            loginButton.isEnabled = emailFilled && passwordFilled
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 
         email = findViewById(R.id.emailLoginField)
+        email.addTextChangedListener(textWatcher)
         password = findViewById(R.id.passwordLoginField)
+        password.addTextChangedListener(textWatcher)
 
         // Connect to Firebase:
         firebaseAuth = FirebaseAuth.getInstance()
