@@ -11,6 +11,7 @@ fun MovieDetailResponse.toMovieDetailUI():MovieDetailUI{
         voteAverage = voteAverage,
         releaseDate = releaseDate.toSafeString().toDateFormat(),
         overview = overview.toSafeString(),
-        homepage = homepage.toSafeString()
+        homepage = homepage.toSafeString(),
+        title = originalTitle.toSafeString()
     )
 }
