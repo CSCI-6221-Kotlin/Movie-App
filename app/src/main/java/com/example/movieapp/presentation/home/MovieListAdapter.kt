@@ -47,7 +47,7 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
         fun bind(movieInfo: MovieInfo){
             val posterURL = Constants.TMDB_IMAGE_BASE_URL + movieInfo.posterPath
             binding.apply {
-                movieTitleText.text = movieInfo.originalTitle
+                // movieTitleText.text = movieInfo.originalTitle
                 Glide.with(ivMovieImage.context)
                     .load(posterURL)
                     .error(R.mipmap.ic_launcher)
@@ -68,6 +68,4 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
     fun setOnMovieClickListener(listener:((MovieInfo)->Unit)){
         movieItemClickListener = listener
     }
-
-
 }

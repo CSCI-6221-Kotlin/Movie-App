@@ -38,6 +38,14 @@
                 app:argType="string" />
 
         </action>
+        <action
+            android:id="@+id/action_movieDetailFragment_self"
+            app:destination="@id/movieDetailFragment">
+            <argument
+                android:name="movieID"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </action>
 
 
     </fragment>

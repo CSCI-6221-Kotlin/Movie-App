@@ -125,6 +125,7 @@ class MoviesFragment : Fragment() {
                                 movieListAdapter4.differ.submitList(movieListUI.movieList)
                             }
 
+                            else -> {}
                         }
                     }
                 }
