@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.movieapp.R
 import com.example.movieapp.firebase.UserDatabase
@@ -33,12 +34,20 @@ class UserAccount : AppCompatActivity() {
         // Logout button clicked:
         logoutButton = findViewById(R.id.logoutButton)
         logoutButton.setOnClickListener {
-            if (firebaseAuth.currentUser != null) {
-                firebaseAuth.signOut()
+            AlertDialog.Builder(this)
+                .setTitle("Log out of your account?")
+                .setPositiveButton("Log Out") { _, _ ->
+                    if (firebaseAuth.currentUser != null) {
+                        firebaseAuth.signOut()
 
-                val intent = Intent(this@UserAccount, MainActivity::class.java)
-                startActivity(intent)
-            }
+                        val intent = Intent(this@UserAccount, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 
