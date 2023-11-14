@@ -95,9 +95,8 @@ class MovieDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch() {
             movieDetailViewModel.moviesListUIState.collect {
                 it?.let { movieListUI ->
-                    movieRecommendationListAdapter.differ.submitList(movieListUI.movieList)
-
-                    if (movieRecommendationListAdapter.itemCount > 0){
+                    if(movieListUI.movieList.isNotEmpty()){
+                        movieRecommendationListAdapter.differ.submitList(movieListUI.movieList)
                         binding.movieCategoryRecommendation.visibility = View.VISIBLE
                     }
                 }

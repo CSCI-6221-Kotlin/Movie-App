@@ -1,6 +1,5 @@
 package com.example.movieapp.domain.repository
 
-import com.example.movieapp.data.remote.dto.MovieDetailResponse
 import com.example.movieapp.domain.model.MovieDetailUI
 import com.example.movieapp.domain.model.MovieListUI
 import com.example.movieapp.domain.usecase.MovieDisplayType
