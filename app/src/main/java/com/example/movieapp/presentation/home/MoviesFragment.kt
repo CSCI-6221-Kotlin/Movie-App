@@ -142,18 +142,18 @@ class MoviesFragment : Fragment() {
 
         val welcomeTextView: TextView? = view?.findViewById(R.id.welcomeText)
         if (currentUserEmail != null) {
-            val currentUserEmailDB = currentUserEmail.replace(".", "")
-
-            val referenceFirebaseData = firebaseDatabase.getReference("Users/$currentUserEmailDB")
+            val referenceFirebaseData = firebaseDatabase.getReference("Users")
             referenceFirebaseData.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach { childSnapshot: DataSnapshot ->
                         val u: UserDatabase? = childSnapshot.getValue(UserDatabase::class.java)
                         if (u != null) {
-                            currentUsername = u.username
+                            if (u.email.equals(currentUserEmail, true)) {
+                                currentUsername = u.username
 
-                            if (welcomeTextView != null) {
-                                welcomeTextView.text = getString(R.string.welcomeUser, currentUsername)
+                                if (welcomeTextView != null) {
+                                    welcomeTextView.text = getString(R.string.welcomeUser, currentUsername)
+                                }
                             }
                         }
                     }
@@ -164,7 +164,9 @@ class MoviesFragment : Fragment() {
                 }
             })
         } else {
-            welcomeTextView!!.text = getString(R.string.movie)
+            if (welcomeTextView != null) {
+                welcomeTextView.text = getString(R.string.movie)
+            }
         }
     }
 

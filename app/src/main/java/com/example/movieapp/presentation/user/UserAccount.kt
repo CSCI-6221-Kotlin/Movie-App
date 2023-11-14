@@ -57,16 +57,16 @@ class UserAccount : AppCompatActivity() {
         var currentUsername: String
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
-            val currentUserEmailDB = currentUserEmail.replace(".", "")
-
-            val referenceFirebaseData = firebaseDatabase.getReference("Users/$currentUserEmailDB")
+            val referenceFirebaseData = firebaseDatabase.getReference("Users")
             referenceFirebaseData.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach { childSnapshot: DataSnapshot ->
                         val u: UserDatabase? = childSnapshot.getValue(UserDatabase::class.java)
                         if (u != null) {
-                            currentUsername = u.username
-                            usernameText.text = currentUsername
+                            if (u.email.equals(currentUserEmail, true)) {
+                                currentUsername = u.username
+                                usernameText.text = currentUsername
+                            }
                         }
                     }
                 }

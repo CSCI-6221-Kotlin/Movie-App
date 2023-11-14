@@ -86,7 +86,7 @@ class UserSignUp : AppCompatActivity() {
         var usernameUnique = true
         if (enteredUsername.isNotEmpty()) {
             val firebaseDatabase : FirebaseDatabase = FirebaseDatabase.getInstance()
-            val referenceFirebaseData = firebaseDatabase.getReference("AllUsernames")
+            val referenceFirebaseData = firebaseDatabase.getReference("Users")
             referenceFirebaseData.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach { childSnapShot: DataSnapshot ->
@@ -132,42 +132,21 @@ class UserSignUp : AppCompatActivity() {
     private fun createAccount(enteredEmail : String, enteredPassword : String, enteredUsername: String) {
         val firebaseAuth = FirebaseAuth.getInstance()
         val firebaseDatabase = FirebaseDatabase.getInstance()
-
-        val enteredEmailDB = enteredEmail.replace(".", "")
+        val existingUsers = mutableListOf<UserDatabase>()
 
         firebaseAuth
             .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val newUser = UserDatabase(username = enteredUsername)
+                    val newUser = UserDatabase(username = enteredUsername, email = enteredEmail)
                     val user = firebaseAuth.currentUser
 
                     // Store username in DB that'll match to the email:
-                    var referenceFirebaseData = firebaseDatabase.getReference("users/$enteredEmailDB")
-                    referenceFirebaseData.addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val referenceFirebase = firebaseDatabase.getReference("Users/$enteredEmailDB")
-                            referenceFirebase.push().setValue(newUser)
-
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            Toast.makeText(
-                                this@UserSignUp,
-                                "Failed to connect to database!",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
-
-                    // Store username to the DB that has all the usernames without the email as key:
-                    val existingUsers = mutableListOf<UserDatabase>()
-                    referenceFirebaseData = firebaseDatabase.getReference("AllUsernames")
+                    val referenceFirebaseData = firebaseDatabase.getReference("Users")
                     referenceFirebaseData.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             snapshot.children.forEach { childSnapshot: DataSnapshot ->
-                                val u: UserDatabase? =
-                                    childSnapshot.getValue(UserDatabase::class.java)
+                                val u : UserDatabase? = childSnapshot.getValue(UserDatabase::class.java)
                                 if (u != null) {
                                     if (!existingUsers.contains(u)) {
                                         existingUsers.add(u)
@@ -176,9 +155,7 @@ class UserSignUp : AppCompatActivity() {
                             }
 
                             if (!existingUsers.contains(newUser)) {
-                                val referenceFirebase =
-                                    firebaseDatabase.getReference("AllUsernames")
-                                referenceFirebase.push().setValue(newUser)
+                                referenceFirebaseData.push().setValue(newUser)
                             }
                         }
 
@@ -186,7 +163,7 @@ class UserSignUp : AppCompatActivity() {
                             Toast.makeText(
                                 this@UserSignUp,
                                 "Failed to connect to database!",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     })
@@ -199,7 +176,7 @@ class UserSignUp : AppCompatActivity() {
                     startActivity(intent)
 
                     val toastMsg = "Sign up success as " + user!!.email
-                    Toast.makeText(this@UserSignUp, toastMsg, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@UserSignUp, toastMsg, Toast.LENGTH_SHORT).show()
                 } else {
                     // Make sure progress bar is invisible:
                     createProgressBar.visibility = View.INVISIBLE
