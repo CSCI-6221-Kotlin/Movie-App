@@ -139,7 +139,7 @@ class MoviesFragment : Fragment() {
         var currentUsername: String
         val currentUserEmail = firebaseAuth.currentUser?.email
 
-        val welcomeT: TextView? = view?.findViewById(R.id.welcomeText)
+        val welcomeTextView: TextView? = view?.findViewById(R.id.welcomeText)
         if (currentUserEmail != null) {
             val currentUserEmailDB = currentUserEmail.replace(".", "")
 
@@ -151,8 +151,8 @@ class MoviesFragment : Fragment() {
                         if (u != null) {
                             currentUsername = u.username
 
-                            if (welcomeT != null) {
-                                welcomeT.text = getString(R.string.welcomeUser, currentUsername)
+                            if (welcomeTextView != null) {
+                                welcomeTextView.text = getString(R.string.welcomeUser, currentUsername)
                             }
                         }
                     }
@@ -162,6 +162,8 @@ class MoviesFragment : Fragment() {
                     Log.d("MovieApp", "Unable to change welcome text!")
                 }
             })
+        } else {
+            welcomeTextView!!.text = getString(R.string.movie)
         }
     }
 
