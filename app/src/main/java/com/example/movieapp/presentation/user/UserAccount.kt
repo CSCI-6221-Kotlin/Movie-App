@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.movieapp.R
 import com.example.movieapp.firebase.UserDatabase
-import com.example.movieapp.presentation.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -40,7 +39,7 @@ class UserAccount : AppCompatActivity() {
                     if (firebaseAuth.currentUser != null) {
                         firebaseAuth.signOut()
 
-                        val intent = Intent(this@UserAccount, MainActivity::class.java)
+                        val intent = Intent(this@UserAccount, UserLogin::class.java)
                         startActivity(intent)
                     }
                 }
