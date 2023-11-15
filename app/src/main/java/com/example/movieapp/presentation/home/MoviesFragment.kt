@@ -1,20 +1,29 @@
 package com.example.movieapp.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapp.R
 import com.example.movieapp.databinding.FragmentMoviesBinding
 import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.usecase.MovieDisplayType
-import com.example.movieapp.presentation.movieDetail.MovieDetailFragment
+import com.example.movieapp.firebase.UserDatabase
+import com.example.movieapp.presentation.user.UserAccount
+import com.example.movieapp.presentation.user.UserLogin
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -37,16 +46,30 @@ class MoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentMoviesBinding.inflate(inflater, container, false)
+        _binding = FragmentMoviesBinding.inflate(inflater,container,false)
+
+        // User Profile Icon Clicked:
+        binding.profileImageButton.setOnClickListener { v ->
+            // Check if a user is logged in:
+            if (FirebaseAuth.getInstance().currentUser == null) {
+                val intent = Intent(v.context, UserLogin::class.java)
+                v.context.startActivity(intent)
+            } else {
+                val intent = Intent(v.context, UserAccount::class.java)
+                v.context.startActivity(intent)
+            }
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews();
-        initListeners();
+        initViews()
+        initListeners()
         getMovies()
         initObservers()
+        changeWelcomeText()
     }
 
     private fun getMovies() {
@@ -106,6 +129,43 @@ class MoviesFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun changeWelcomeText() {
+        val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+        val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+
+        var currentUsername: String
+        val currentUserEmail = firebaseAuth.currentUser?.email
+
+        val welcomeTextView: TextView? = view?.findViewById(R.id.welcomeText)
+        if (currentUserEmail != null) {
+            val referenceFirebaseData = firebaseDatabase.getReference("Users")
+            referenceFirebaseData.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { childSnapshot: DataSnapshot ->
+                        val u: UserDatabase? = childSnapshot.getValue(UserDatabase::class.java)
+                        if (u != null) {
+                            if (u.email.equals(currentUserEmail, true)) {
+                                currentUsername = u.username
+
+                                if (welcomeTextView != null) {
+                                    welcomeTextView.text = getString(R.string.welcomeUser, currentUsername)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("MovieApp", "Unable to change welcome text!")
+                }
+            })
+        } else {
+            if (welcomeTextView != null) {
+                welcomeTextView.text = getString(R.string.movie)
             }
         }
     }
