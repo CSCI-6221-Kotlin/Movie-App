@@ -78,6 +78,7 @@ private val okHttpVersion = "5.0.0-alpha.2"
 private val moshiVersion = "1.13.0"
 private val hiltVersion = "2.43.2"
 private val coroutinesVersion = "1.6.0"
+private val roomVersion = "2.6.0"
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
@@ -117,5 +118,12 @@ dependencies {
     // Google Firebase:
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+    //Room DB
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+
 }
 

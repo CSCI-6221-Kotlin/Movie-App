@@ -14,12 +14,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initMoviesFragment()
+        initLoginFragment()
     }
 
-    private fun initMoviesFragment(){
+    private fun initLoginFragment(){
            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
            val navController = navHostFragment.navController
-           navController.navigate(R.id.moviesFragment)
+           navController.navigate(R.id.userLoginFragment)
     }
 }

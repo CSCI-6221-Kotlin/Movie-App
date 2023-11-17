@@ -1,6 +1,5 @@
 package com.example.movieapp.presentation.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,10 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapp.R
 import com.example.movieapp.databinding.FragmentMoviesBinding
 import com.example.movieapp.domain.model.MovieInfo
+import com.example.movieapp.domain.preferences.Preferences
 import com.example.movieapp.domain.usecase.MovieDisplayType
 import com.example.movieapp.firebase.UserDatabase
-import com.example.movieapp.presentation.user.UserAccount
-import com.example.movieapp.presentation.user.UserLogin
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -39,6 +38,9 @@ class MoviesFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var preferences: Preferences
+
     private val moviesViewModel: MoviesViewModel by viewModels()
 
     override fun onCreateView(
@@ -46,20 +48,7 @@ class MoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentMoviesBinding.inflate(inflater,container,false)
-
-        // User Profile Icon Clicked:
-        binding.profileImageButton.setOnClickListener { v ->
-            // Check if a user is logged in:
-            if (FirebaseAuth.getInstance().currentUser == null) {
-                val intent = Intent(v.context, UserLogin::class.java)
-                v.context.startActivity(intent)
-            } else {
-                val intent = Intent(v.context, UserAccount::class.java)
-                v.context.startActivity(intent)
-            }
-        }
-
+        _binding = FragmentMoviesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -69,7 +58,11 @@ class MoviesFragment : Fragment() {
         initListeners()
         getMovies()
         initObservers()
-        changeWelcomeText()
+
+        //Only make firebase call for the first time
+        if (preferences.getUserPrefs().username.isEmpty()) {
+            changeWelcomeText()
+        }
     }
 
     private fun getMovies() {
@@ -149,10 +142,14 @@ class MoviesFragment : Fragment() {
                         val u: UserDatabase? = childSnapshot.getValue(UserDatabase::class.java)
                         if (u != null) {
                             if (u.email.equals(currentUserEmail, true)) {
+                                //Save user name and email to preferences
                                 currentUsername = u.username
+                                preferences.saveUserName(currentUsername)
+                                preferences.saveEmail(currentUserEmail)
 
                                 if (welcomeTextView != null) {
-                                    welcomeTextView.text = getString(R.string.welcomeUser, currentUsername)
+                                    welcomeTextView.text =
+                                        getString(R.string.welcomeUser, currentUsername)
                                 }
                             }
                         }
@@ -172,7 +169,8 @@ class MoviesFragment : Fragment() {
 
     private fun initListeners() {
         val listener: (MovieInfo) -> Unit = { movieInfo ->
-            val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movieInfo.id)
+            val action =
+                MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movieInfo.id)
             findNavController().navigate(action)
         }
 
@@ -180,6 +178,22 @@ class MoviesFragment : Fragment() {
         movieListAdapter2.setOnMovieClickListener(listener)
         movieListAdapter3.setOnMovieClickListener(listener)
         movieListAdapter4.setOnMovieClickListener(listener)
+
+        // User Profile Icon Clicked:
+        binding.profileImageButton.setOnClickListener { _ ->
+            // Check if a user is logged in:
+            val action = MoviesFragmentDirections.actionMoviesFragmentToUserProfileFragment()
+            findNavController().navigate(action)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (preferences.getUserPrefs().username.isNotEmpty()) {
+            binding.welcomeText.text =
+                getString(R.string.welcomeUser, preferences.getUserPrefs().username)
+        }
+
     }
 
     override fun onDestroyView() {

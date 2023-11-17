@@ -18,6 +18,5 @@ buildscript {
         classpath("com.android.tools.build:gradle:$android_build_tools_version")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
         classpath("com.google.dagger:hilt-android-gradle-plugin:$hiltAndroidGradlePluginVersion")
-
     }
 }

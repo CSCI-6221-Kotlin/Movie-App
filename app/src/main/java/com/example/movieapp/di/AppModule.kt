@@ -1,6 +1,13 @@
 package com.example.movieapp.di
 
+import android.app.Application
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import androidx.room.Room
+import com.example.movieapp.data.local.MoviesDatabase
+import com.example.movieapp.data.preferences.UserPreferences
 import com.example.movieapp.data.remote.TMDBApi
+import com.example.movieapp.domain.preferences.Preferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,5 +43,27 @@ object AppModule {
             .client(client)
             .build()
             .create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMovieDatabase(app:Application) : MoviesDatabase{
+        return Room.databaseBuilder(
+            app,
+            MoviesDatabase::class.java,
+            MoviesDatabase.DATABASE_NAME
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreferences(app:Application) : SharedPreferences {
+        return app.getSharedPreferences("shared_pref", MODE_PRIVATE)
+    }
+
+    @Singleton
+    @Provides
+    fun providePreferences (sharedPreferences: SharedPreferences) : Preferences {
+        return UserPreferences(sharedPreferences)
     }
 }

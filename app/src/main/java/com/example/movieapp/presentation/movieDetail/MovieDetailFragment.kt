@@ -4,35 +4,26 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.movieapp.R
-import com.example.movieapp.core.convertToHttps
 import com.example.movieapp.core.toSafeString
 import com.example.movieapp.databinding.FragmentMovieDetailBinding
-import com.example.movieapp.databinding.FragmentMoviesBinding
 import com.example.movieapp.domain.model.MovieDetailUI
+import com.example.movieapp.domain.model.MovieInfo
+import com.example.movieapp.presentation.home.MovieListAdapter
 import com.example.movieapp.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
-import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movieapp.domain.model.MovieInfo
-import com.example.movieapp.domain.usecase.MovieDisplayType
-import com.example.movieapp.presentation.home.MovieListAdapter
-import com.example.movieapp.presentation.home.MoviesFragmentDirections
-import com.example.movieapp.presentation.home.MoviesViewModel
 
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
@@ -43,7 +34,6 @@ class MovieDetailFragment : Fragment() {
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
 
     private val binding get() = _binding!!
-
 
 
     override fun onCreateView(
@@ -59,6 +49,7 @@ class MovieDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initListeners()
+        checkIfMovieIsInFavoriteList()
         getMovieDetail()
         getMovieRecommendation()
         initObservers()
@@ -95,11 +86,17 @@ class MovieDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch() {
             movieDetailViewModel.moviesListUIState.collect {
                 it?.let { movieListUI ->
-                    if(movieListUI.movieList.isNotEmpty()){
+                    if (movieListUI.movieList.isNotEmpty()) {
                         movieRecommendationListAdapter.differ.submitList(movieListUI.movieList)
                         binding.movieCategoryRecommendation.visibility = View.VISIBLE
                     }
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieDetailViewModel.isMovieInFavoriteList.collect { isInFavorites ->
+                binding.addToFavorites.isChecked = isInFavorites
             }
         }
     }
@@ -114,7 +111,7 @@ class MovieDetailFragment : Fragment() {
                 movieVoteAvgText.text = "$percentage"
                 circularProgressBar.progress = percentage
 
-                if(movieDetailViewModel.movieDetailUI.value?.homepage?.isNotBlank() == true){
+                if (movieDetailViewModel.movieDetailUI.value?.homepage?.isNotBlank() == true) {
                     homePageText.visibility = View.VISIBLE
                 }
 
@@ -150,7 +147,9 @@ class MovieDetailFragment : Fragment() {
         binding.homePageTextValue.setOnClickListener {
             val homepageUrl = movieDetailViewModel.movieDetailUI.value?.homepage.toSafeString()
             val action =
-                MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieWebPageFragment(homepageUrl)
+                MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieWebPageFragment(
+                    homepageUrl
+                )
             findNavController().navigate(action)
         }
 
@@ -159,7 +158,24 @@ class MovieDetailFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+
         movieRecommendationListAdapter.setOnMovieClickListener(listener)
+
+
+        binding.addToFavorites.setOnCheckedChangeListener { _, isChecked ->
+            if (!isChecked) {
+                movieDetailViewModel.removeMovieFromFavoriteList(args.movieID)
+            }
+
+            else{
+                movieDetailViewModel.addMovieToFavoriteList(args.movieID)
+            }
+        }
+
+    }
+
+    private fun checkIfMovieIsInFavoriteList() {
+        movieDetailViewModel.isMovieInFavoriteList(args.movieID)
     }
 
     override fun onDestroyView() {
