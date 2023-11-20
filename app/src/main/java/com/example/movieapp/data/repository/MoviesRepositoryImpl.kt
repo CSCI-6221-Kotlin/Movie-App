@@ -1,10 +1,13 @@
 package com.example.movieapp.data.repository
 
+import com.example.movieapp.data.local.FavoriteMoviesDAO
+import com.example.movieapp.data.mapper.toMovieDetailEntity
 import com.example.movieapp.data.mapper.toMovieDetailUI
+import com.example.movieapp.data.mapper.toMovieInfo
 import com.example.movieapp.data.mapper.toMovieListUI
 import com.example.movieapp.data.remote.TMDBApi
-import com.example.movieapp.data.remote.dto.MovieDetailResponse
 import com.example.movieapp.domain.model.MovieDetailUI
+import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.model.MovieListUI
 import com.example.movieapp.domain.repository.MoviesRepository
 import com.example.movieapp.domain.usecase.MovieDisplayType
@@ -12,10 +15,13 @@ import com.example.movieapp.util.Constants
 import com.example.movieapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MoviesRepositoryImpl @Inject constructor(
-    private val api: TMDBApi
+    private val api: TMDBApi,
+    private val dao: FavoriteMoviesDAO
 ) : MoviesRepository {
 
     override suspend fun getTopRatedMovies(movieDisplayType: MovieDisplayType): Flow<Resource<MovieListUI>> =
@@ -130,4 +136,32 @@ class MoviesRepositoryImpl @Inject constructor(
                 emit(Resource.Error(exception.toString()))
             }
         }
+
+    override suspend fun insertFavoriteMovie(userName:String, movieDetailUI: MovieDetailUI, movieID: Int) {
+        dao.insertFavoriteMovie(movieDetailUI.toMovieDetailEntity(userName,movieID))
+    }
+
+    override fun getFavoriteMovies(userName: String): Flow<List<MovieInfo>>  {
+        return dao.getFavoriteMovies(
+            userName = userName
+        ).map { movies->
+            movies.map {
+                it.toMovieInfo()
+            }
+        }
+    }
+
+    override suspend fun isMovieInFavoriteList(userName: String, movieID: Int): Flow<Boolean> {
+        val count = dao.isMovieInFavoriteList(userName,movieID)
+        return flowOf(count>0)
+    }
+
+    override suspend fun removeFromFavorites(
+        userName: String,
+        movieDetailUI: MovieDetailUI,
+        movieID: Int
+    ) {
+        dao.removeFromFavorites(movieDetailUI.toMovieDetailEntity(userName,movieID))
+    }
+
 }

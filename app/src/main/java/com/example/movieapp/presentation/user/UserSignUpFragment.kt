@@ -1,32 +1,28 @@
 package com.example.movieapp.presentation.user
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.example.movieapp.R
+import androidx.navigation.fragment.findNavController
+import com.example.movieapp.databinding.FragmentUserSignUpBinding
 import com.example.movieapp.firebase.UserDatabase
-import com.example.movieapp.presentation.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class UserSignUp : AppCompatActivity() {
-    private lateinit var username: EditText
-    private lateinit var email: EditText
-    private lateinit var password: EditText
-    private lateinit var passwordRetyped: EditText
-    private lateinit var createAccountButton: Button
-    private lateinit var createProgressBar: ProgressBar
+
+class UserSignUpFragment : Fragment() {
+
+    private var _binding: FragmentUserSignUpBinding? = null
+    private val binding get() = _binding!!
 
     private val textWatcher: TextWatcher = object: TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -34,13 +30,13 @@ class UserSignUp : AppCompatActivity() {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             // Verify if all components are filled out:
-            val usernameFilled: Boolean = username.text.toString().isNotEmpty()
-            val emailFilled: Boolean = email.text.toString().isNotEmpty()
-            val passwordFilled: Boolean = password.text.toString().isNotEmpty()
-            val passwordRetypedFilled: Boolean = passwordRetyped.text.toString().isNotEmpty()
+            val usernameFilled: Boolean = binding.usernameField.text.toString().isNotEmpty()
+            val emailFilled: Boolean = binding.emailField.text.toString().isNotEmpty()
+            val passwordFilled: Boolean = binding.passwordField.text.toString().isNotEmpty()
+            val passwordRetypedFilled: Boolean = binding.retypePasswordField.text.toString().isNotEmpty()
 
             if (usernameFilled && emailFilled) {
-                createAccountButton.isEnabled = passwordFilled && passwordRetypedFilled
+                binding.buttonCreateLogin.isEnabled = passwordFilled && passwordRetypedFilled
             }
         }
 
@@ -48,38 +44,44 @@ class UserSignUp : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.signup_layout)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        _binding = FragmentUserSignUpBinding.inflate(inflater,container,false)
+        return binding.root
+    }
 
-        username = findViewById(R.id.usernameField)
-        username.addTextChangedListener(textWatcher)
-        email = findViewById(R.id.emailField)
-        email.addTextChangedListener(textWatcher)
-        password = findViewById(R.id.passwordField)
-        password.addTextChangedListener(textWatcher)
-        passwordRetyped = findViewById(R.id.retypePasswordField)
-        passwordRetyped.addTextChangedListener(textWatcher)
-        createAccountButton = findViewById(R.id.buttonCreateLogin)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initListeners()
+    }
 
-        // Make sure progress bar is invisible:
-        createProgressBar = findViewById(R.id.createProgressBar)
-        createProgressBar.visibility = View.INVISIBLE
+    private fun initListeners(){
+        binding.apply {
+            usernameField.addTextChangedListener(textWatcher)
+            emailField.addTextChangedListener(textWatcher)
+            passwordField.addTextChangedListener(textWatcher)
+            retypePasswordField.addTextChangedListener(textWatcher)
+            // Make sure progress bar is invisible:
+            createProgressBar.visibility = View.INVISIBLE
+            buttonCreateLogin.setOnClickListener {
+                val enteredUsername: String = usernameField.text.toString()
+                val enteredEmail: String = emailField.text.toString()
+                val enteredPassword: String = passwordField.text.toString()
+                val enteredPasswordRetyped: String = retypePasswordField.text.toString()
 
-        createAccountButton.setOnClickListener {
-            val enteredUsername: String = username.text.toString()
-            val enteredEmail: String = email.text.toString()
-            val enteredPassword: String = password.text.toString()
-            val enteredPasswordRetyped: String = passwordRetyped.text.toString()
+                // Make progress bar visible:
+                createProgressBar.visibility = View.VISIBLE
 
-            // Make progress bar visible:
-            createProgressBar.visibility = View.VISIBLE
-
-            // Verify that the username is unique:
-            // If unique: It'll create the account only if email was not used previously
-            // and passwords are the same
-            verifyUniqueUsername(enteredUsername, enteredEmail, enteredPassword, enteredPasswordRetyped)
+                // Verify that the username is unique:
+                // If unique: It'll create the account only if email was not used previously
+                // and passwords are the same
+                verifyUniqueUsername(enteredUsername, enteredEmail, enteredPassword, enteredPasswordRetyped)
+            }
         }
+
     }
 
     private fun verifyUniqueUsername (enteredUsername: String, enteredEmail : String, enteredPassword: String, enteredPasswordRetyped: String) {
@@ -103,17 +105,17 @@ class UserSignUp : AppCompatActivity() {
                             createAccount(enteredEmail, enteredPassword, enteredUsername)
                             referenceFirebaseData.removeEventListener(this)
                         } else {
-                            Toast.makeText(applicationContext, "Passwords are not the same. Please type again.", Toast.LENGTH_SHORT).show()
-                            createProgressBar.visibility = View.INVISIBLE
+                            Toast.makeText(requireContext(), "Passwords are not the same. Please type again.", Toast.LENGTH_SHORT).show()
+                            binding.createProgressBar.visibility = View.INVISIBLE
                             referenceFirebaseData.removeEventListener(this)
                         }
                     } else {
                         Toast.makeText(
-                            applicationContext,
+                            requireContext(),
                             "$enteredUsername is already taken. Please type a different username.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        createProgressBar.visibility = View.INVISIBLE
+                        binding.createProgressBar.visibility = View.INVISIBLE
                         referenceFirebaseData.removeEventListener(this)
                     }
                 }
@@ -161,7 +163,7 @@ class UserSignUp : AppCompatActivity() {
 
                         override fun onCancelled(error: DatabaseError) {
                             Toast.makeText(
-                                this@UserSignUp,
+                                requireContext(),
                                 "Failed to connect to database!",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -169,20 +171,28 @@ class UserSignUp : AppCompatActivity() {
                     })
 
                     // Make sure progress bar is invisible:
-                    createProgressBar.visibility = View.INVISIBLE
+                    binding.createProgressBar.visibility = View.INVISIBLE
 
-                    // Navigate to home screen:
-                    val intent = Intent(this@UserSignUp, MainActivity::class.java)
-                    startActivity(intent)
+                    // TODO Navigate to moviesfragment
+                    val action = UserSignUpFragmentDirections.actionUserSignUpFragmentToMoviesNavGraph()
+                    findNavController().navigate(action)
 
                     val toastMsg = "Sign up success as " + user!!.email
-                    Toast.makeText(this@UserSignUp, toastMsg, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), toastMsg, Toast.LENGTH_SHORT).show()
                 } else {
                     // Make sure progress bar is invisible:
-                    createProgressBar.visibility = View.INVISIBLE
+                    binding.createProgressBar.visibility = View.INVISIBLE
 
-                    Toast.makeText(this@UserSignUp, "Creating account has failed with provided email and password!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Creating account has failed with provided email and password!", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

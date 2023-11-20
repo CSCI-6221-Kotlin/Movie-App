@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/userLoginFragment">
+
+    <fragment
+        android:id="@+id/userLoginFragment"
+        android:name="com.example.movieapp.presentation.user.UserLoginFragment"
+        android:label="UserLoginFragment" >
+        <action
+            android:id="@+id/action_userLoginFragment_to_userSignUpFragment"
+            app:destination="@id/userSignUpFragment" />
+        <action
+            android:id="@+id/action_userLoginFragment_to_movies_nav_graph"
+            app:destination="@id/movies_nav_graph" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/userSignUpFragment"
+        android:name="com.example.movieapp.presentation.user.UserSignUpFragment"
+        android:label="UserSignUpFragment" >
+
+        <action
+            android:id="@+id/action_userSignUpFragment_to_movies_nav_graph"
+            app:destination="@id/movies_nav_graph" />
+    </fragment>
+
+    <include app:graph="@navigation/movies_nav_graph" />
+
+</navigation>

@@ -5,7 +5,6 @@
     android:id="@+id/movies_nav_graph"
     app:startDestination="@id/moviesFragment">
 
-    <!-- Existing fragments in the main navigation graph -->
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.example.movieapp.presentation.home.MoviesFragment"
@@ -19,6 +18,9 @@
                 android:defaultValue="0"
                 app:argType="integer" />
         </action>
+        <action
+            android:id="@+id/action_moviesFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
 
     <fragment
@@ -57,6 +59,19 @@
         <argument
             android:name="url"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.movieapp.presentation.user.UserProfileFragment"
+        android:label="UserProfileFragment">
+        <action
+            android:id="@+id/action_userProfileFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment">
+            <argument
+                android:name="movieID"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </action>
     </fragment>
 
 </navigation>
