@@ -6,7 +6,7 @@ import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.model.MovieListUI
 import com.example.movieapp.domain.usecase.MovieDisplayType
 
-fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType?):MovieListUI{
+fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType? = MovieDisplayType.POPULAR):MovieListUI{
     val resultList = results?.map {
         MovieInfo(
             id = it.id,

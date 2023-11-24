@@ -1,4 +1,4 @@
-package com.example.movieapp.presentation.home
+package com.example.movieapp.presentation.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.movieapp.R
-import com.example.movieapp.databinding.ItemMovieLayoutBinding
+import com.example.movieapp.databinding.ItemSearchLayoutBinding
 import com.example.movieapp.domain.model.MovieInfo
-import com.example.movieapp.domain.model.MovieListUI
 import com.example.movieapp.util.Constants
 
-class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>() {
+class MovieSearchListAdapter: RecyclerView.Adapter<MovieSearchListAdapter.MoviesViewHolder>() {
 
     private val differCallback = object: DiffUtil.ItemCallback<MovieInfo>(){
         override fun areItemsTheSame(oldItem: MovieInfo, newItem: MovieInfo): Boolean {
@@ -30,7 +29,7 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
         parent: ViewGroup,
         viewType: Int
     ): MoviesViewHolder {
-        val binding = ItemMovieLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ItemSearchLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return MoviesViewHolder(binding)
     }
 
@@ -42,7 +41,7 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
         return differ.currentList.size
     }
 
-    inner class MoviesViewHolder(val binding:ItemMovieLayoutBinding):RecyclerView.ViewHolder(binding.root){
+    inner class MoviesViewHolder(val binding:ItemSearchLayoutBinding):RecyclerView.ViewHolder(binding.root){
 
         fun bind(movieInfo: MovieInfo){
             val posterURL = Constants.TMDB_IMAGE_BASE_URL + movieInfo.posterPath
@@ -50,7 +49,6 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MoviesViewHolder>(
                 Glide.with(ivMovieImage.context)
                     .load(posterURL)
                     .error(R.mipmap.ic_launcher)
-                    .centerInside()
                     .into(ivMovieImage)
 
                 root.setOnClickListener {

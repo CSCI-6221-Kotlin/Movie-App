@@ -18,4 +18,5 @@ interface MoviesRepository {
     fun getFavoriteMovies(userName : String) : Flow<List<MovieInfo>>
     suspend fun isMovieInFavoriteList(userName:String, movieID: Int) : Flow<Boolean>
     suspend fun removeFromFavorites(userName: String, movieDetailUI: MovieDetailUI, movieID: Int)
+    suspend fun searchMovies(keyword : String) : Flow<Resource<MovieListUI>>
 }

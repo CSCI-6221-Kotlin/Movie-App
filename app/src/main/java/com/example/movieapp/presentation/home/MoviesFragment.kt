@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,7 @@ class MoviesFragment : Fragment() {
     private lateinit var movieListAdapter2: MovieListAdapter
     private lateinit var movieListAdapter3: MovieListAdapter
     private lateinit var movieListAdapter4: MovieListAdapter
+
 
     private val binding get() = _binding!!
 
@@ -185,6 +187,14 @@ class MoviesFragment : Fragment() {
             val action = MoviesFragmentDirections.actionMoviesFragmentToUserProfileFragment()
             findNavController().navigate(action)
         }
+
+        binding.movieSearchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+          if(hasFocus){
+              val action = MoviesFragmentDirections.actionMoviesFragmentToMovieSearchFragment()
+              findNavController().navigate(action)
+          }
+        }
+
     }
 
     override fun onResume() {

@@ -21,6 +21,16 @@
         <action
             android:id="@+id/action_moviesFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_moviesFragment_to_movieSearchFragment"
+            app:destination="@id/movieSearchFragment">
+
+            <argument
+                android:name="movieID"
+                android:defaultValue="0"
+                app:argType="integer" />
+
+        </action>
     </fragment>
 
     <fragment
@@ -72,6 +82,15 @@
                 android:defaultValue="0"
                 app:argType="integer" />
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/movieSearchFragment"
+        android:name="com.example.movieapp.presentation.search.MovieSearchFragment"
+        android:label="fragment_movie_search"
+        tools:layout="@layout/fragment_movie_search">
+        <action
+            android:id="@+id/action_movieSearchFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment" />
     </fragment>
 
 </navigation>
