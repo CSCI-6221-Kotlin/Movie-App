@@ -17,6 +17,11 @@
                 android:name="movieID"
                 android:defaultValue="0"
                 app:argType="integer" />
+
+            <argument
+                android:name="releaseDate"
+                android:defaultValue=""
+                app:argType="string" />
         </action>
         <action
             android:id="@+id/action_moviesFragment_to_userProfileFragment"
@@ -42,6 +47,11 @@
             android:name="movieID"
             android:defaultValue="0"
             app:argType="integer" />
+
+        <argument
+            android:name="releaseDate"
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_movieDetailFragment_to_movieWebPageFragment"
             app:destination="@id/movieWebPageFragment">

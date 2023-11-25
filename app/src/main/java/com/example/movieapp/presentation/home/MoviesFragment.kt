@@ -172,7 +172,7 @@ class MoviesFragment : Fragment() {
     private fun initListeners() {
         val listener: (MovieInfo) -> Unit = { movieInfo ->
             val action =
-                MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movieInfo.id)
+                MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movieInfo.id,movieInfo.releaseDate)
             findNavController().navigate(action)
         }
 

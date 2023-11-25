@@ -31,7 +31,8 @@ interface TMDBApi {
     @GET("movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id") movieID: Int,
-        @Query("api_key") apiKey: String = BuildConfig.API_KEY
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("region") region: String = "US"
     ): Response<MovieDetailResponse>
 
     @GET("movie/{movie_id}/recommendations")

@@ -9,6 +9,7 @@ fun MovieDetailEntity.toMovieInfo(): MovieInfo {
         id = movieID ?: 0,
         originalTitle = title,
         posterPath = posterPath,
+        releaseDate = releaseDate
     )
 }
 
