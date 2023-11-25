@@ -15,7 +15,9 @@
         android:id="@+id/cardView3"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/movieSearchView"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,6 +52,18 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/movieSearchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:queryHint="Search for movies"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardView3"
+        app:layout_constraintBottom_toTopOf="@id/movieCategoryTrending"
+        android:layout_marginBottom="16dp"
+        />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/movieCategoryTrending"
         android:layout_width="match_parent"
@@ -62,7 +76,7 @@
         app:cardElevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView3">
+        app:layout_constraintTop_toBottomOf="@+id/movieSearchView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

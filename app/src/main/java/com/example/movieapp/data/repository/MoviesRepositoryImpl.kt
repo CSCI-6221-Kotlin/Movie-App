@@ -164,4 +164,23 @@ class MoviesRepositoryImpl @Inject constructor(
         dao.removeFromFavorites(movieDetailUI.toMovieDetailEntity(userName,movieID))
     }
 
+    override suspend fun searchMovies(keyword: String): Flow<Resource<MovieListUI>>  =
+        flow {
+            emit(Resource.Loading())
+            try{
+                val response = api.searchMovies(query = keyword)
+                if(response.isSuccessful) {
+                    response.body()?.let { movieListDT0 ->
+                        emit(Resource.Success(movieListDT0.toMovieListUI()))
+                    }
+                }
+            }
+
+            catch (exception : Exception) {
+                emit(Resource.Loading(false))
+                exception.printStackTrace()
+                emit(Resource.Error(exception.toString()))
+            }
+        }
+
 }

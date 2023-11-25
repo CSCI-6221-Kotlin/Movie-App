@@ -69,7 +69,7 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun getMovieDetail() {
-        movieDetailViewModel.getMovieDetail(args.movieID)
+        movieDetailViewModel.getMovieDetail(args.movieID,args.releaseDate)
     }
 
     private fun getMovieRecommendation() {

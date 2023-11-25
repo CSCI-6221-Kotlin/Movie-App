@@ -36,11 +36,14 @@ class MovieDetailViewModel @Inject constructor(
     private val _isMovieInFavoriteList = MutableStateFlow<Boolean>(false)
     val isMovieInFavoriteList: StateFlow<Boolean> = _isMovieInFavoriteList.asStateFlow()
 
-    fun getMovieDetail(movieID: Int) {
+    fun getMovieDetail(movieID: Int, releaseDate: String) {
         viewModelScope.launch {
             getMovieDetailUseCase(GetMovieDetailUseCase.Params(movieID))
                 .collect {
                     _movieDetailUI.value = it.data
+                    _movieDetailUI.value = _movieDetailUI.value?.copy(
+                        releaseDate = releaseDate
+                    )
                 }
         }
     }

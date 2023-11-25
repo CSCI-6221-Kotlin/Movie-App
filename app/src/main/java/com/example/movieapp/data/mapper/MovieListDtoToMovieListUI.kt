@@ -1,18 +1,20 @@
 package com.example.movieapp.data.mapper
 
+import com.example.movieapp.core.toDateFormat
 import com.example.movieapp.core.toSafeList
 import com.example.movieapp.data.remote.dto.MovieListDTO
 import com.example.movieapp.domain.model.MovieInfo
 import com.example.movieapp.domain.model.MovieListUI
 import com.example.movieapp.domain.usecase.MovieDisplayType
 
-fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType?):MovieListUI{
+fun MovieListDTO.toMovieListUI(movieDisplayType: MovieDisplayType? = MovieDisplayType.POPULAR):MovieListUI{
     val resultList = results?.map {
         MovieInfo(
             id = it.id,
             originalTitle = it.originalTitle,
             posterPath = it.posterPath,
-            movieDisplayType = movieDisplayType
+            movieDisplayType = movieDisplayType,
+            releaseDate = it.releaseDate.toDateFormat()
         )
     }
     return MovieListUI(
