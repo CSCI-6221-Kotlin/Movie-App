@@ -154,7 +154,7 @@ class MovieDetailFragment : Fragment() {
         }
 
         val listener: (MovieInfo) -> Unit = { movieInfo ->
-            val action = MovieDetailFragmentDirections.actionMovieDetailFragmentSelf(movieInfo.id)
+            val action = MovieDetailFragmentDirections.actionMovieDetailFragmentSelf(movieInfo.id, movieInfo.releaseDate)
             findNavController().navigate(action)
         }
 

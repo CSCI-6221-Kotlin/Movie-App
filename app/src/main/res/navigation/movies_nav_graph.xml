@@ -67,6 +67,11 @@
                 android:name="movieID"
                 android:defaultValue="0"
                 app:argType="integer" />
+
+            <argument
+                android:name="releaseDate"
+                android:defaultValue=""
+                app:argType="string" />
         </action>
 
 
