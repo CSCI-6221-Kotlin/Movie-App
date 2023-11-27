@@ -100,7 +100,19 @@
         tools:layout="@layout/fragment_movie_search">
         <action
             android:id="@+id/action_movieSearchFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+            app:destination="@id/movieDetailFragment">
+
+            <argument
+                android:name="movieID"
+                android:defaultValue="0"
+                app:argType="integer" />
+
+            <argument
+                android:name="releaseDate"
+                android:defaultValue=""
+                app:argType="string" />
+
+        </action>
     </fragment>
 
 </navigation>

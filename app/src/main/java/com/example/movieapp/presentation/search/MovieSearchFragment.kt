@@ -69,7 +69,7 @@ class MovieSearchFragment : Fragment() {
         })
 
         movieSearchListAdapter.setOnMovieClickListener {
-            val action = MovieSearchFragmentDirections.actionMovieSearchFragmentToMovieDetailFragment(it.id)
+            val action = MovieSearchFragmentDirections.actionMovieSearchFragmentToMovieDetailFragment(it.id,it.releaseDate)
             findNavController().navigate(action)
         }
     }
