@@ -49,7 +49,9 @@ class MovieSearchListAdapter: RecyclerView.Adapter<MovieSearchListAdapter.Movies
                 Glide.with(ivMovieImage.context)
                     .load(posterURL)
                     .error(R.mipmap.ic_launcher)
+                    .centerCrop()
                     .into(ivMovieImage)
+
 
                 root.setOnClickListener {
                     movieItemClickListener?.let {
